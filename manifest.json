@@ -1,0 +1,16 @@
+{
+    "manifest_version": 3,
+    "name": "Weather App",
+    "description": "A weather app that compiles data from different sources, etc... etc..",
+    "version": "1.0",
+    "action": {
+      "default_popup": "client.html",
+      "default_popup_width": 400,
+      "default_popup_height": 600
+    },
+    "permissions": [
+    ],
+    "background": {
+      "service_worker": "background.js"
+    }
+  }
