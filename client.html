@@ -19,7 +19,7 @@
     </video>
     <!-- Overlay -->
     <div class="relative w-full h-full z-10">
-        <div class="flex flex-col px-6">
+        <div class="flex flex-col px-6 gap-3 overflow-auto">
             <!-- At a Glance Info-->
             <div class="flex flex-col w-full items-center p-3">
                 <p id="cityName" class="flex text-2xl">City Name</p>
@@ -64,9 +64,36 @@
                     </div>
                 </div>
             </div>
+            <!-- Weekly Predictions -->
+            <div class="flex flex-col w-full h-fit rounded backdrop-blur-3xl p-3">
+                <p id="currentWeatherDesc" class="flex p-2 border-b">Weekly Forecast</p>
+                <div class="flex flex-col w-full p-2">
+                    <div class="flex flex-row">
+                        <p class="font-bold text-lg">Today</p>
+                    </div>
+                    <div class="flex flex-row">
+                        <p class="font-bold text-lg">Tuesday</p>
+                    </div>
+                    <div class="flex flex-row">
+                        <p class="font-bold text-lg">Wednesday</p>
+                    </div>
+                    <div class="flex flex-row">
+                        <p class="font-bold text-lg">Thursday</p>
+                    </div>
+                    <div class="flex flex-row">
+                        <p class="font-bold text-lg">Friday</p>
+                    </div>
+                    <div class="flex flex-row">
+                        <p class="font-bold text-lg">Saturday</p>
+                    </div>
+                    <div class="flex flex-row">
+                        <p class="font-bold text-lg">Sunday</p>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- Footer, lets you change between location -->
-        <div class="flex sticky top-[100vh] flex-row justify-center w-full backdrop-blur-3xl p-6 gap-3">
+        <div class="flex sticky top-full flex-row justify-center w-full backdrop-blur-3xl p-6 gap-3">
             <div class="rounded-full bg-white h-2 w-2">
 
             </div>
