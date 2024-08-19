@@ -3,3 +3,4 @@ A weather extension with a simplistic ui, no paid plans, just weather at your fi
 
 # Credits
 ## Weather icon: Created by fjstudio - Flaticon
+## Video Background: Video by João Pavese
