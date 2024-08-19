@@ -5,8 +5,18 @@ function setBackground(inp) {
     console.log("Setting: "+video.src)
 }
 setBackground()
-if (navigator.serviceWorker.controller) {
-    navigator.serviceWorker.controller.postMessage({
-        type: 'refresh'
-    });
+navigator.geolocation.getCurrentPosition(geoLocSuccess,geoLocFail)
+function geoLocSuccess(position) {
+    const coords = position.coords
+    console.log(coords.latitude)
+    console.log(coords.longitude)
+    if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({
+            type: 'refresh',
+            data: coords
+        });
+    }
+}
+function geoLocFail(err) {
+    console.log(`Geolocation failed with error ${err}`)
 }

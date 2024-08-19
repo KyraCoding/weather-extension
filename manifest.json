@@ -10,7 +10,8 @@
       "default_popup_height": 600
     },
     "permissions": [
-      "offscreen"
+      "offscreen",
+      "geolocation"
     ],
     "background": {
       "service_worker": "background.js"
