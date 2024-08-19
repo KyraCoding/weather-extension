@@ -5,3 +5,8 @@ function setBackground(inp) {
     console.log("Setting: "+video.src)
 }
 setBackground()
+if (navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({
+        type: 'refresh'
+    });
+}
