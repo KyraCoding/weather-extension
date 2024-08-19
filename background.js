@@ -1,5 +1,5 @@
 // Global values
-let creatingDocument = null;
+let creatingDocument = false;
 
 // Run on extention reload/install
 chrome.runtime.onInstalled.addListener(async () => {
@@ -13,29 +13,27 @@ self.addEventListener('message', function (event) {
 })
 
 async function createOffscreen() {
-  console.log("running!")
-  const existingContexts = await chrome.runtime.getContexts({ contextTypes: ['OFFSCREEN_DOCUMENT'] })
-  console.log(chrome.runtime.getURL("/offscreen.html"))
-  console.log(existingContexts)
+  if (creatingDocument) {
+    console.log("Nice race condition, too bad I have locks");
+    return;
+  }
+  creatingDocument = true
+  const existingContexts = await chrome.runtime.getContexts({
+    contextTypes: ['OFFSCREEN_DOCUMENT'],
+    documentUrls: [chrome.runtime.getURL("offscreen.html")]
+  })
   // Can't create more than one!
   if (existingContexts.length > 0) {
     console.log("Offscreen docment already exists!")
     return;
   } else {
-    // Already being created
-    if (creatingDocument) {
-      console.log("Offscreen docment already being created!")
-      await creatingDocument;
-    } else {
-      creating = chrome.offscreen.createDocument({
-        url: 'offscreen.html',
-        reasons: ['GEOLOCATION'],
-        justification: 'To get the user location',
-      });
-      await creating;
-      creating = null;
-      console.log("Offscreen docment added!")
-    }
+    await chrome.offscreen.createDocument({
+      url: 'offscreen.html',
+      reasons: ['GEOLOCATION'],
+      justification: 'To get the user location',
+    });
+    creatingDocument = false;
+    console.log("Offscreen docment added!")
   }
 }
 
