@@ -8,9 +8,3 @@ self.addEventListener('message', function (event) {
     getWeather(event.data.data)
   }
 })
-
-async function getWeather(coords) {
-  const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.latitude}&longitude=${coords.longitude}&hourly=temperature_2m,precipitation_probability`)
-  const data = await response.json()
-  console.log(data)
-}
