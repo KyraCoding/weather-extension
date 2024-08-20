@@ -8,10 +8,31 @@ async function getWeather(coords) {
     const data = await response.json()
     console.log(data)
 }
+function codeToBackground(code) {
+    if ([0,1,2].includes(code)) {
+        // Clear
+    } else if ([3].includes(code)) {
+        // Cloudy
+        
+    } else if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67].includes(code)) {
+        // Rainy
+
+    } else if ([80, 81, 82, 95, 96, 99].includes(code)) {
+        // Thunderstorms
+
+    } else if ([71, 73, 75, 77, 85, 86].includes(code)) {
+        // Snowing
+
+    } else if ([45, 48].includes(code)) {
+        // Foggy
+    } else {
+        console.warn(`Undefined code: ${code}`)
+    }
+}
 setBackground()
-navigator.geolocation.getCurrentPosition(function(position) {
+navigator.geolocation.getCurrentPosition(function (position) {
     const coords = position.coords
     getWeather(coords)
-}, function(err) {
+}, function (err) {
     console.log(`Geolocation failed with error ${err}`)
 })
