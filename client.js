@@ -6,6 +6,11 @@ function setBackground(inp) {
     video.play();
     video.classList.add("animate-fadein")
 }
+function formatHour(hour) {
+    let period = hour >= 12 ? 'PM' : 'AM'
+    var hour = hour % 12 || 12;
+    return `${hour}${period.toLowerCase()}`;
+}
 function codeToBackground(code) {
     if ([0, 1, 2].includes(code)) {
         // Clear
@@ -50,6 +55,24 @@ async function getWeather(coords) {
     document.getElementById("currentHigh").innerHTML = `H:${Math.round(data.daily.temperature_2m_max[0])}${data.daily_units.temperature_2m_max[0]}`
     document.getElementById("currentLow").innerHTML = `L:${Math.round(data.daily.temperature_2m_min[0])}${data.daily_units.temperature_2m_min[0]}`
     document.getElementById("cityName").innerHTML = cityName
+
+    // Hourly Weather
+    const hourlyOffset = new Date(data.current.time).getHours();
+    for (let i =0;i<24;i++) {
+        const time = data.hourly.time[i+hourlyOffset]
+        const temp = data.hourly.temperature_2m[i+hourlyOffset]
+        let wrapper = document.createElement("div");
+        let wrapperTime = document.createElement("p");
+        let wrapperTemp = document.createElement("p")
+        wrapper.className = "flex flex-col whitespace-nowrap w-auto"
+        wrapperTime.className = "text-md"
+        wrapperTemp.className = "text-md"
+        wrapperTime.innerHTML = formatHour(new Date(time).getHours())
+        wrapperTemp.innerHTML = `${Math.round(temp)}${data.daily_units.temperature_2m_min[0]}`
+        wrapper.appendChild(wrapperTime)
+        wrapper.appendChild(wrapperTemp)
+        document.getElementById("currentWeatherRow").appendChild(wrapper)
+    }
 }
 navigator.geolocation.getCurrentPosition(function (position) {
     const coords = position.coords
