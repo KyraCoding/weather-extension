@@ -15,29 +15,96 @@ function codeToBackground(code) {
     if ([0, 1, 2].includes(code)) {
         // Clear
         setBackground("sunny.mp4")
-        return "Sunny"
     } else if ([3].includes(code)) {
         // Cloudy
         setBackground("cloudy.mp4")
-        return "Cloudy"
     } else if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67].includes(code)) {
         // Rainy
         setBackground("rainy.mp4")
-        return "Raining"
     } else if ([80, 81, 82, 95, 96, 99].includes(code)) {
         // Thunderstorms
         setBackground("thunder.mp4")
-        return "Thundering"
     } else if ([71, 73, 75, 77, 85, 86].includes(code)) {
         // Snowing
         setBackground("snowing.mp4")
-        return "Snowing"
     } else if ([45, 48].includes(code)) {
         // Foggy
         setBackground("foggy.mp4")
-        return "Foggy"
     } else {
         console.warn(`Undefined code: ${code}`)
+    }
+}
+function codeToDescription(code) {
+    if ([0, 1].includes(code)) {
+        return {
+            title: "Clear",
+            description: "Clear skies until "
+        }
+    } else if ([2].includes(code)) {
+        return {
+            title: "Partly Cloudy",
+            description: "Partly cloudy until "
+        }
+    } else if ([3].includes(code)) {
+        return {
+            title: "Cloudy",
+            description: "Cloudy until "
+        }
+    } else if ([45, 48].includes(code)) {
+        return {
+            title: "Foggy",
+            description: "Foggy until "
+        }
+    } else if ([51, 53, 55].includes(code)) {
+        return {
+            title: "Light rain",
+            description: "Light rain until "
+        }
+    } else if ([56, 57].includes(code)) {
+        return {
+            title: "Freezing Drizzles",
+            description: "Freezing drizzles until "
+        }
+    } else if ([61, 63, 65].includes(code)) {
+        return {
+            title: "Rain",
+            description: "Raining until "
+        }
+    } else if ([66, 67].includes(code)) {
+        return {
+            title: "Freezing rain",
+            description: "Freezing rain until "
+        }
+    } else if ([71, 73, 75].includes(code)) {
+        return {
+            title: "Snow",
+            description: "Snowing until "
+        }
+    } else if ([77].includes(code)) {
+        return {
+            title: "Light Snowfall",
+            description: "Light snowfall until "
+        }
+    } else if ([80, 81, 82].includes(code)) {
+        return {
+            title: "Rain Showers",
+            description: "Rain showers until "
+        }
+    } else if ([85, 86].includes(code)) {
+        return {
+            title: "Heavy Snowfall",
+            description: "Heavy snowfalls until "
+        }
+    } else if ([95].includes(code)) {
+        return {
+            title: "Thunderstorm",
+            description: "Thunderstorms until "
+        }
+    } else if ([96, 99].includes(code)) {
+        return {
+            title: "Hailing Thunderstorm",
+            description: "Hailing Thunderstorms until "
+        }
     }
 }
 async function getWeather(coords) {
@@ -58,9 +125,9 @@ async function getWeather(coords) {
 
     // Hourly Weather
     const hourlyOffset = new Date(data.current.time).getHours();
-    for (let i =0;i<24;i++) {
-        const time = data.hourly.time[i+hourlyOffset]
-        const temp = data.hourly.temperature_2m[i+hourlyOffset]
+    for (let i = 0; i < 24; i++) {
+        const time = data.hourly.time[i + hourlyOffset]
+        const temp = data.hourly.temperature_2m[i + hourlyOffset]
         let wrapper = document.createElement("div");
         let wrapperTime = document.createElement("p");
         let wrapperTemp = document.createElement("p")
