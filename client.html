@@ -9,10 +9,10 @@
     <script src="tailwind.config.js"></script>
 </head>
 
-<body class="h-[36rem] w-96 font-mono">
+<body class="h-[36rem] w-96 font-mono bg-gray-600">
     <!-- Video Background -->
-    <video autoplay muted loop class="z-0 absolute inset-0 w-full h-full object-cover">
-        <source id="backgroundVideo" src="assets/backgrounds/cloudy.mp4" type="video/mp4">
+    <video id="backgroundVideo" autoplay muted loop class="opacity-0 animation-duration-1000 z-0 absolute inset-0 w-full h-full object-cover">
+        <source id="backgroundVideoSource" src="assets/backgrounds/sunny.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
     <!-- Overlay -->
