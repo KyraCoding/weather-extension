@@ -115,8 +115,8 @@ async function getWeather(coords) {
     console.log(data)
     console.log(cityName)
 
-    var currentWeather = codeToBackground(data.current.weather_code)
-    document.getElementById("currentWeather").innerHTML = currentWeather
+    codeToBackground(data.current.weather_code)
+    document.getElementById("currentWeather").innerHTML = codeToDescription(data.current.weather_code).title
     document.getElementById("currentTemp").innerHTML = Math.round(data.current.temperature_2m)
     document.getElementById("tempType").innerHTML = data.current_units.temperature_2m[0]
     document.getElementById("currentHigh").innerHTML = `H:${Math.round(data.daily.temperature_2m_max[0])}${data.daily_units.temperature_2m_max[0]}`
@@ -125,6 +125,7 @@ async function getWeather(coords) {
 
     // Hourly Weather
     const hourlyOffset = new Date(data.current.time).getHours();
+    var currentCondition = codeToDescription(data.hourly.weather_code[hourlyOffset])
     for (let i = 0; i < 24; i++) {
         const time = data.hourly.time[i + hourlyOffset]
         const temp = data.hourly.temperature_2m[i + hourlyOffset]
@@ -139,6 +140,12 @@ async function getWeather(coords) {
         wrapper.appendChild(wrapperTime)
         wrapper.appendChild(wrapperTemp)
         document.getElementById("currentWeatherRow").appendChild(wrapper)
+        if (currentCondition != false && currentCondition.description != codeToDescription(data.hourly.weather_code[hourlyOffset + i]).description) {
+            document.getElementById("currentWeatherDesc").innerHTML = `${currentCondition}${time}.`
+            currentCondition = false;
+        } else if (i == 23 && currentCondition != false) {
+            document.getElementById("currentWeatherDesc").innerHTML = "Current conditions will continue."
+        }
     }
 }
 navigator.geolocation.getCurrentPosition(function (position) {
