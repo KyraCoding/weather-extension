@@ -160,21 +160,28 @@ async function getWeather(coords) {
         let wrapper = document.createElement("div");
         let wrapperTime = document.createElement("p");
         let wrapperIcon = document.createElement("i")
+        let wrapperTempWrapper = document.createElement("div")
         let wrapperTemp = document.createElement("p")
+        let wrapperTempSign = document.createElement("p")
         wrapper.className = "flex flex-col justify-center whitespace-nowrap w-auto"
         if (i == 0) {
-            wrapperTime.className = "flex text-md font-bold"
+            wrapperTime.className = "flex justify-center text-md font-bold"
             wrapperTime.innerHTML = "Now"
         } else {
-            wrapperTime.className = "flex text-md"
+            wrapperTime.className = "flex justify-center text-md"
             wrapperTime.innerHTML = formatHour(new Date(time).getHours())
         }
-        wrapperTemp.className = "flex font-bold text-md"
         wrapperIcon.className = "flex py-2 justify-center wi "+currentCondition.dayIcon
-        wrapperTemp.innerHTML = `${Math.round(temp)}${data.daily_units.temperature_2m_min[0]}`
+        wrapperTempWrapper.className = "relative"
+        wrapperTemp.className = "block font-bold text-center text-md"
+        wrapperTempSign.className = "absolute top-0 right-[-0.3rem] font-bold text-center text-md"
+        wrapperTemp.innerHTML = `${Math.round(temp)}`
+        wrapperTempSign.innerHTML = `${data.daily_units.temperature_2m_min[0]}`
         wrapper.appendChild(wrapperTime)
         wrapper.appendChild(wrapperIcon)
-        wrapper.appendChild(wrapperTemp)
+        wrapperTempWrapper.appendChild(wrapperTemp)
+        wrapperTempWrapper.appendChild(wrapperTempSign)
+        wrapper.appendChild(wrapperTempWrapper)
         document.getElementById("currentWeatherRow").appendChild(wrapper)
         if (currentCondition.description != false && currentCondition.description != codeToDescription(data.hourly.weather_code[hourlyOffset + i]).description) {
             document.getElementById("currentWeatherDesc").innerHTML = `${currentCondition}${formatHour(new Date(time).getHours())}.`
