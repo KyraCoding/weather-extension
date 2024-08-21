@@ -38,72 +38,100 @@ function codeToDescription(code) {
     if ([0, 1].includes(code)) {
         return {
             title: "Clear",
-            description: "Clear skies until "
+            description: "Clear skies until ",
+            dayIcon: "wi-day-sunny",
+            nightIcon: "wi-night-clear"
         }
     } else if ([2].includes(code)) {
         return {
             title: "Partly Cloudy",
-            description: "Partly cloudy until "
+            description: "Partly cloudy until ",
+            dayIcon: "wi-day-cloudy",
+            nightIcon: "wi-night-alt-cloudy"
         }
     } else if ([3].includes(code)) {
         return {
             title: "Cloudy",
-            description: "Cloudy until "
+            description: "Cloudy until ",
+            dayIcon: "wi-cloud",
+            nightIcon: "wi-cloud"
         }
     } else if ([45, 48].includes(code)) {
         return {
             title: "Foggy",
-            description: "Foggy until "
+            description: "Foggy until ",
+            dayIcon: "wi-day-fog",
+            nightIcon: "wi-night-fog"
         }
     } else if ([51, 53, 55].includes(code)) {
         return {
             title: "Light rain",
-            description: "Light rain until "
+            description: "Light rain until ",
+            dayIcon: "wi-day-sprinkle",
+            nightIcon: "wi-night-alt-sprinkle"
         }
     } else if ([56, 57].includes(code)) {
         return {
             title: "Freezing Drizzles",
-            description: "Freezing drizzles until "
+            description: "Freezing drizzles until ",
+            dayIcon: "wi-day-rain",
+            nightIcon: "wi-night-alt-rain"
         }
     } else if ([61, 63, 65].includes(code)) {
         return {
             title: "Rain",
-            description: "Raining until "
+            description: "Raining until ",
+            dayIcon: "wi-day-rain",
+            nightIcon: "wi-night-alt-rain"
         }
     } else if ([66, 67].includes(code)) {
         return {
             title: "Freezing rain",
-            description: "Freezing rain until "
+            description: "Freezing rain until ",
+            dayIcon: "wi-day-sleet",
+            nightIcon: "wi-night-alt-sleet"
         }
     } else if ([71, 73, 75].includes(code)) {
         return {
             title: "Snow",
-            description: "Snowing until "
+            description: "Snowing until ",
+            dayIcon: "wi-day-snow",
+            nightIcon: "wi-night-alt-snow"
         }
     } else if ([77].includes(code)) {
         return {
             title: "Light Snowfall",
-            description: "Light snowfall until "
+            description: "Light snowfall until ",
+            dayIcon: "wi-day-snow",
+            nightIcon: "wi-night-alt-snow"
         }
     } else if ([80, 81, 82].includes(code)) {
         return {
             title: "Rain Showers",
-            description: "Rain showers until "
+            description: "Rain showers until ",
+            dayIcon: "wi-day-showers",
+            nightIcon: "wi-night-alt-showers"
         }
     } else if ([85, 86].includes(code)) {
         return {
             title: "Heavy Snowfall",
-            description: "Heavy snowfalls until "
+            description: "Heavy snowfalls until ",
+            dayIcon: "wi-day-snow",
+            nightIcon: "wi-night-alt-snow"
         }
     } else if ([95].includes(code)) {
         return {
             title: "Thunderstorm",
-            description: "Thunderstorms until "
+            description: "Thunderstorms until ",
+            dayIcon: "wi-day-thunderstorm",
+            nightIcon: "wi-thunderstorm"
         }
     } else if ([96, 99].includes(code)) {
         return {
             title: "Hailing Thunderstorm",
-            description: "Hailing Thunderstorms until "
+            description: "Hailing Thunderstorms until ",
+            dayIcon: "wi-day-thunderstorm",
+            nightIcon: "wi-thunderstorm"
         }
     }
 }
@@ -125,30 +153,33 @@ async function getWeather(coords) {
 
     // Hourly Weather
     const hourlyOffset = new Date(data.current.time).getHours();
-    var currentCondition = codeToDescription(data.hourly.weather_code[hourlyOffset]).description
+    var currentCondition = codeToDescription(data.hourly.weather_code[hourlyOffset])
     for (let i = 0; i < 24; i++) {
         const time = data.hourly.time[i + hourlyOffset]
         const temp = data.hourly.temperature_2m[i + hourlyOffset]
         let wrapper = document.createElement("div");
         let wrapperTime = document.createElement("p");
+        let wrapperIcon = document.createElement("i")
         let wrapperTemp = document.createElement("p")
-        wrapper.className = "flex flex-col whitespace-nowrap w-auto"
+        wrapper.className = "flex flex-col justify-center whitespace-nowrap w-auto"
         if (i == 0) {
-            wrapperTime.className = "text-md font-bold"
+            wrapperTime.className = "flex text-md font-bold"
             wrapperTime.innerHTML = "Now"
         } else {
-            wrapperTime.className = "text-md"
+            wrapperTime.className = "flex text-md"
             wrapperTime.innerHTML = formatHour(new Date(time).getHours())
         }
-        wrapperTemp.className = "text-md"
+        wrapperTemp.className = "flex font-bold text-md"
+        wrapperIcon.className = "flex py-2 justify-center wi "+currentCondition.dayIcon
         wrapperTemp.innerHTML = `${Math.round(temp)}${data.daily_units.temperature_2m_min[0]}`
         wrapper.appendChild(wrapperTime)
+        wrapper.appendChild(wrapperIcon)
         wrapper.appendChild(wrapperTemp)
         document.getElementById("currentWeatherRow").appendChild(wrapper)
-        if (currentCondition != false && currentCondition != codeToDescription(data.hourly.weather_code[hourlyOffset + i]).description) {
+        if (currentCondition.description != false && currentCondition.description != codeToDescription(data.hourly.weather_code[hourlyOffset + i]).description) {
             document.getElementById("currentWeatherDesc").innerHTML = `${currentCondition}${formatHour(new Date(time).getHours())}.`
-            currentCondition = false;
-        } else if (i == 23 && currentCondition != false) {
+            currentCondition.description = false;
+        } else if (i == 23 && currentCondition.description != false) {
             document.getElementById("currentWeatherDesc").innerHTML = "Current conditions will continue."
         }
     }
