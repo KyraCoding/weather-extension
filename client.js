@@ -125,7 +125,7 @@ async function getWeather(coords) {
 
     // Hourly Weather
     const hourlyOffset = new Date(data.current.time).getHours();
-    var currentCondition = codeToDescription(data.hourly.weather_code[hourlyOffset])
+    var currentCondition = codeToDescription(data.hourly.weather_code[hourlyOffset]).description
     for (let i = 0; i < 24; i++) {
         const time = data.hourly.time[i + hourlyOffset]
         const temp = data.hourly.temperature_2m[i + hourlyOffset]
@@ -133,15 +133,20 @@ async function getWeather(coords) {
         let wrapperTime = document.createElement("p");
         let wrapperTemp = document.createElement("p")
         wrapper.className = "flex flex-col whitespace-nowrap w-auto"
-        wrapperTime.className = "text-md"
+        if (i == 0) {
+            wrapperTime.className = "text-md font-bold"
+            wrapperTime.innerHTML = "Now"
+        } else {
+            wrapperTime.className = "text-md"
+            wrapperTime.innerHTML = formatHour(new Date(time).getHours())
+        }
         wrapperTemp.className = "text-md"
-        wrapperTime.innerHTML = formatHour(new Date(time).getHours())
         wrapperTemp.innerHTML = `${Math.round(temp)}${data.daily_units.temperature_2m_min[0]}`
         wrapper.appendChild(wrapperTime)
         wrapper.appendChild(wrapperTemp)
         document.getElementById("currentWeatherRow").appendChild(wrapper)
-        if (currentCondition != false && currentCondition.description != codeToDescription(data.hourly.weather_code[hourlyOffset + i]).description) {
-            document.getElementById("currentWeatherDesc").innerHTML = `${currentCondition}${time}.`
+        if (currentCondition != false && currentCondition != codeToDescription(data.hourly.weather_code[hourlyOffset + i]).description) {
+            document.getElementById("currentWeatherDesc").innerHTML = `${currentCondition}${formatHour(new Date(time).getHours())}.`
             currentCondition = false;
         } else if (i == 23 && currentCondition != false) {
             document.getElementById("currentWeatherDesc").innerHTML = "Current conditions will continue."
