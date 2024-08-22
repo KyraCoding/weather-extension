@@ -3,11 +3,11 @@ function handleMessages(message, sender, sendResponse) {
   if (message.target !== 'offscreen') {
     return;
   }
-
   if (message.type !== 'get-geolocation') {
     console.warn(`Unexpected message type received: '${message.type}'.`);
     return;
   }
+
   getLocation().then((loc) => sendResponse(loc));
 
   return true;
@@ -23,7 +23,6 @@ function clone(obj) {
   }
   return copy;
 }
-
 async function getLocation() {
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(
