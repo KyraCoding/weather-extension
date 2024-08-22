@@ -60,77 +60,77 @@ function codeToDescription(code) {
         return {
             title: "Foggy",
             description: "Foggy until ",
-            dayIcon: "wi-day-fog",
-            nightIcon: "wi-night-fog"
+            dayIcon: "wi-fog",
+            nightIcon: "wi-fog"
         }
     } else if ([51, 53, 55].includes(code)) {
         return {
             title: "Light rain",
             description: "Light rain until ",
-            dayIcon: "wi-day-sprinkle",
-            nightIcon: "wi-night-alt-sprinkle"
+            dayIcon: "wi-sprinkle",
+            nightIcon: "wi-sprinkle"
         }
     } else if ([56, 57].includes(code)) {
         return {
             title: "Freezing Drizzles",
             description: "Freezing drizzles until ",
-            dayIcon: "wi-day-rain",
-            nightIcon: "wi-night-alt-rain"
+            dayIcon: "wi-rain-mix",
+            nightIcon: "wi-rain-mix"
         }
     } else if ([61, 63, 65].includes(code)) {
         return {
             title: "Rain",
             description: "Raining until ",
-            dayIcon: "wi-day-rain",
-            nightIcon: "wi-night-alt-rain"
+            dayIcon: "wi-rain",
+            nightIcon: "wi-rain"
         }
     } else if ([66, 67].includes(code)) {
         return {
             title: "Freezing rain",
             description: "Freezing rain until ",
-            dayIcon: "wi-day-sleet",
-            nightIcon: "wi-night-alt-sleet"
+            dayIcon: "wi-rain-mix",
+            nightIcon: "wi-rain-mix"
         }
     } else if ([71, 73, 75].includes(code)) {
         return {
             title: "Snow",
             description: "Snowing until ",
-            dayIcon: "wi-day-snow",
-            nightIcon: "wi-night-alt-snow"
+            dayIcon: "wi-snow",
+            nightIcon: "wi-snow"
         }
     } else if ([77].includes(code)) {
         return {
             title: "Light Snowfall",
             description: "Light snowfall until ",
-            dayIcon: "wi-day-snow",
-            nightIcon: "wi-night-alt-snow"
+            dayIcon: "wi-snow",
+            nightIcon: "wi-snow"
         }
     } else if ([80, 81, 82].includes(code)) {
         return {
             title: "Rain Showers",
             description: "Rain showers until ",
-            dayIcon: "wi-day-showers",
-            nightIcon: "wi-night-alt-showers"
+            dayIcon: "wi-showers",
+            nightIcon: "wi-showers"
         }
     } else if ([85, 86].includes(code)) {
         return {
             title: "Heavy Snowfall",
             description: "Heavy snowfalls until ",
-            dayIcon: "wi-day-snow",
-            nightIcon: "wi-night-alt-snow"
+            dayIcon: "wi-snow-wind",
+            nightIcon: "wi-snow-wind"
         }
     } else if ([95].includes(code)) {
         return {
             title: "Thunderstorm",
             description: "Thunderstorms until ",
-            dayIcon: "wi-day-thunderstorm",
+            dayIcon: "wi-thunderstorm",
             nightIcon: "wi-thunderstorm"
         }
     } else if ([96, 99].includes(code)) {
         return {
             title: "Hailing Thunderstorm",
             description: "Hailing Thunderstorms until ",
-            dayIcon: "wi-day-thunderstorm",
+            dayIcon: "wi-thunderstorm",
             nightIcon: "wi-thunderstorm"
         }
     }
@@ -138,7 +138,7 @@ function codeToDescription(code) {
 async function getWeather(coords) {
     // ${coords.latitude}&longitude=${coords.longitude}
     const cityName = (await (await fetch(`https://api-bdc.net/data/reverse-geocode-client?latitude=${coords.latitude}&longitude=${coords.longitude}&localityLanguage=en`)).json()).locality
-    const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.latitude}&longitude=${coords.longitude}&current=temperature_2m,weather_code&hourly=temperature_2m,precipitation_probability,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=auto`)
+    const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.latitude}&longitude=${coords.longitude}&current=temperature_2m,weather_code&hourly=temperature_2m,precipitation_probability,is_day,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset&temperature_unit=fahrenheit&timezone=auto`)
     const data = await response.json()
     console.log(data)
     console.log(cityName)
@@ -150,7 +150,6 @@ async function getWeather(coords) {
     document.getElementById("currentHigh").innerHTML = `H:${Math.round(data.daily.temperature_2m_max[0])}${data.daily_units.temperature_2m_max[0]}`
     document.getElementById("currentLow").innerHTML = `L:${Math.round(data.daily.temperature_2m_min[0])}${data.daily_units.temperature_2m_min[0]}`
     document.getElementById("cityName").innerHTML = cityName
-
     // Hourly Weather
     const hourlyOffset = new Date(data.current.time).getHours();
     var currentCondition = codeToDescription(data.hourly.weather_code[hourlyOffset])
@@ -163,6 +162,11 @@ async function getWeather(coords) {
         let wrapperTempWrapper = document.createElement("div")
         let wrapperTemp = document.createElement("p")
         let wrapperTempSign = document.createElement("p")
+        if (data.hourly.is_day[i+hourlyOffset]) {
+            wrapperIcon.className = "flex py-2 justify-center wi "+codeToDescription(data.hourly.weather_code[hourlyOffset+i]).dayIcon
+        } else {
+            wrapperIcon.className = "flex py-2 justify-center wi "+codeToDescription(data.hourly.weather_code[hourlyOffset+i]).nightIcon
+        }
         wrapper.className = "flex flex-col justify-center whitespace-nowrap w-auto"
         if (i == 0) {
             wrapperTime.className = "flex justify-center text-md font-bold"
@@ -171,7 +175,7 @@ async function getWeather(coords) {
             wrapperTime.className = "flex justify-center text-md"
             wrapperTime.innerHTML = formatHour(new Date(time).getHours())
         }
-        wrapperIcon.className = "flex py-2 justify-center wi "+currentCondition.dayIcon
+        
         wrapperTempWrapper.className = "relative"
         wrapperTemp.className = "block font-bold text-center text-md"
         wrapperTempSign.className = "absolute top-0 right-[-0.3rem] font-bold text-center text-md"
@@ -184,7 +188,7 @@ async function getWeather(coords) {
         wrapper.appendChild(wrapperTempWrapper)
         document.getElementById("currentWeatherRow").appendChild(wrapper)
         if (currentCondition.description != false && currentCondition.description != codeToDescription(data.hourly.weather_code[hourlyOffset + i]).description) {
-            document.getElementById("currentWeatherDesc").innerHTML = `${currentCondition}${formatHour(new Date(time).getHours())}.`
+            document.getElementById("currentWeatherDesc").innerHTML = `${currentCondition.description}${formatHour(new Date(time).getHours())}.`
             currentCondition.description = false;
         } else if (i == 23 && currentCondition.description != false) {
             document.getElementById("currentWeatherDesc").innerHTML = "Current conditions will continue."
