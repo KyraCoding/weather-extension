@@ -193,29 +193,11 @@ async function getWeather(coords) {
         } else if (i == 23 && currentCondition.description != false) {
             document.getElementById("currentWeatherDesc").innerHTML = "Current conditions will continue."
         }
-    }
-    /*
-    <div class="flex flex-row py-3 border-t border-white/50">
-        <div class="flex flex-row w-2/5">
-            <div class="flex w-1/2 justify-start">
-                <p class="font-bold">Today</p>
-            </div>
-            <div class="flex w-1/2 justify-start">
-                <i class="wi wi-day-sunny self-center"></i>
-            </div>
-        </div>
-        <div class="flex flex-row w-3/5 justify-center">
-            <p class="flex w-1/5 justify-start">35</p>
-            <div class="flex justify-center w-3/5 h-1 bg-gray-800 self-center rounded-2xl"></div>
-            <p class="flex w-1/5 font-bold justify-end">99</p>
-        </div>
-    </div>
-    */  
+    } 
     // Daily Weather
     
     let minTemp = Math.min(...data.daily.temperature_2m_max, ...data.daily.temperature_2m_min)
     let maxTemp = Math.max(...data.daily.temperature_2m_max, ...data.daily.temperature_2m_min)
-    
     for (let i = 0; i < 7; i++) {
         let lowTemp = data.daily.temperature_2m_min[i]
         let highTemp = data.daily.temperature_2m_max[i]
@@ -227,6 +209,7 @@ async function getWeather(coords) {
         let wrapperIconDiv = document.createElement("div")
         let wrapperLowTemp = document.createElement("p")
         let wrapperChartDiv = document.createElement("div")
+        let wrapperChartOverlay = document.createElement("div")
         let wrapperHighTemp = document.createElement("p")
 
         wrapper.className = "flex flex-row py-3 border-t border-white/50"
@@ -235,7 +218,8 @@ async function getWeather(coords) {
         wrapperDateDiv.className = "flex w-1/2 justify-start"
         wrapperIconDiv.className = "flex w-1/2 justify-start"
         wrapperLowTemp.className = "flex w-1/5 justify-start"
-        wrapperChartDiv.className = "flex justify-center w-3/5 h-1 bg-gray-800 self-center rounded-2xl"
+        wrapperChartDiv.className = "relative flex justify-center w-3/5 h-1 bg-gray-800/50 self-center rounded-2xl"
+        wrapperChartOverlay.className = `absolute h-full bg-white rounded-2xl w-[${width = ((highTemp - lowTemp) / (maxTemp - minTemp)) * 100}%] left-[${left = ((lowTemp - minTemp) / (maxTemp - minTemp)) * 100}%]`
         wrapperHighTemp.className = "flex w-1/5 font-bold justify-end"
 
         if (i == 0) {
@@ -245,11 +229,12 @@ async function getWeather(coords) {
         }
         
         wrapperIconDiv.innerHTML = `<i class="wi ${codeToDescription(data.daily.weather_code[i]).dayIcon} self-center"></i>`
-        wrapperLowTemp.innerHTML = lowTemp
-        wrapperHighTemp.innerHTML = highTemp
+        wrapperLowTemp.innerHTML = `${Math.round(lowTemp)}${data.daily_units.temperature_2m_min[0]}`
+        wrapperHighTemp.innerHTML = `${Math.round(highTemp)}${data.daily_units.temperature_2m_min[0]}`
 
         wrapperLeftDiv.appendChild(wrapperDateDiv)
         wrapperLeftDiv.appendChild(wrapperIconDiv)
+        wrapperChartDiv.appendChild(wrapperChartOverlay)
         wrapperRightDiv.appendChild(wrapperLowTemp)
         wrapperRightDiv.appendChild(wrapperChartDiv)
         wrapperRightDiv.appendChild(wrapperHighTemp)
