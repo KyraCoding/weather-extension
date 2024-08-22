@@ -121,14 +121,14 @@ function codeToDescription(code) {
         }
     } else if ([95].includes(code)) {
         return {
-            title: "Thunderstorm",
+            title: "Thunderstorms",
             description: "Thunderstorms until ",
             dayIcon: "wi-thunderstorm",
             nightIcon: "wi-thunderstorm"
         }
     } else if ([96, 99].includes(code)) {
         return {
-            title: "Hailing Thunderstorm",
+            title: "Hailing Thunderstorms",
             description: "Hailing Thunderstorms until ",
             dayIcon: "wi-thunderstorm",
             nightIcon: "wi-thunderstorm"
@@ -193,6 +193,49 @@ async function getWeather(coords) {
         } else if (i == 23 && currentCondition.description != false) {
             document.getElementById("currentWeatherDesc").innerHTML = "Current conditions will continue."
         }
+    }
+
+    // Daily Weather
+    let minTemp = Math.min(...data.daily.temperature_2m_max,...data.daily.temperature_2m_min)
+    let maxTemp = Math.max(...data.daily.temperature_2m_max,...data.daily.temperature_2m_min)
+    for (let i =0;i< data.daily.temperature_2m_max.length;i++) {
+        let lowTemp = data.daily.temperature_2m_min[i]
+        let highTemp = data.daily.temperature_2m_max[i]
+
+        /*
+        <div class="flex flex-row py-3 border-t border-white/50">
+            <div class="flex flex-row w-2/5">
+                <div class="flex w-1/2 justify-start">
+                    <p class="font-bold">Today</p>
+                </div>
+                <div class="flex w-1/2 justify-start">
+                    <i class="wi wi-day-sunny self-center"></i>
+                </div>
+            </div>
+            <div class="flex flex-row w-3/5 justify-center">
+                <p class="flex w-1/5 justify-start">35</p>
+                <div class="flex justify-center w-3/5 h-1 bg-gray-800 self-center rounded-2xl"></div>
+                <p class="flex w-1/5 font-bold justify-end">99</p>
+            </div>
+        </div>
+        */
+        let wrapper = document.createElement("div")
+        let wrapperLeftDiv = document.createElement("div")
+        let wrapperRightDiv = document.createElement("div")
+        let wrapperDateDiv = document.createElement("div")
+        let wrapperIconDiv = document.createElement("div")
+        let wrapperLowTemp = document.createElement("p")
+        let wrapperChartDiv = document.createElement("div")
+        let wrapperHighTemp = document.createElement("p")
+
+        wrapper.className = "flex flex-row py-3 border-t border-white/50"
+        wrapperLeftDiv.className = "flex flex-row w-2/5"
+        wrapperRightDiv.className = "flex flex-row w-3/5 justify-center"
+        wrapperDateDiv.className = "flex w-1/2 justify-start"
+        wrapperIconDiv.className = "flex w-1/2 justify-start"
+        wrapperLowTemp.className = "flex w-1/5 justify-start"
+        wrapperChartDiv.className = "flex justify-center w-3/5 h-1 bg-gray-800 self-center rounded-2xl"
+        wrapperHighTemp.className = "flex w-1/5 font-bold justify-end"
     }
 }
 navigator.geolocation.getCurrentPosition(function (position) {
