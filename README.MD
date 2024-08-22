@@ -1,8 +1,12 @@
 # Weather Extension
 
 A weather extension with a simplistic ui, no paid plans, just weather at your fingertips
+Heavily inspired by Apple's Weather app
 
 # Credits
+
+# Weather API
+[Open Meteo](https://open-meteo.com/)
 
 ## Icons
 

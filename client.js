@@ -225,7 +225,7 @@ async function getWeather(coords) {
         if (i == 0) {
             wrapperDateDiv.innerHTML = `<p class="font-bold">Today</p>`
         } else {
-            wrapperDateDiv.innerHTML = `<p class="font-bold">${new Date(data.daily.time[i]).toLocaleDateString('en-US', { weekday: 'short' })}</p>`
+            wrapperDateDiv.innerHTML = `<p class="font-bold">${new Date(data.daily.time[i]).toLocaleDateString('en-US', { weekday: 'short',timeZone: "UTC" })}</p>`
         }
         
         wrapperIconDiv.innerHTML = `<i class="wi ${codeToDescription(data.daily.weather_code[i]).dayIcon} self-center"></i>`
