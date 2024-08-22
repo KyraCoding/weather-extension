@@ -162,10 +162,10 @@ async function getWeather(coords) {
         let wrapperTempWrapper = document.createElement("div")
         let wrapperTemp = document.createElement("p")
         let wrapperTempSign = document.createElement("p")
-        if (data.hourly.is_day[i+hourlyOffset]) {
-            wrapperIcon.className = "flex py-2 justify-center wi "+codeToDescription(data.hourly.weather_code[hourlyOffset+i]).dayIcon
+        if (data.hourly.is_day[i + hourlyOffset]) {
+            wrapperIcon.className = "flex py-2 justify-center wi " + codeToDescription(data.hourly.weather_code[hourlyOffset + i]).dayIcon
         } else {
-            wrapperIcon.className = "flex py-2 justify-center wi "+codeToDescription(data.hourly.weather_code[hourlyOffset+i]).nightIcon
+            wrapperIcon.className = "flex py-2 justify-center wi " + codeToDescription(data.hourly.weather_code[hourlyOffset + i]).nightIcon
         }
         wrapper.className = "flex flex-col justify-center whitespace-nowrap w-auto"
         if (i == 0) {
@@ -175,7 +175,7 @@ async function getWeather(coords) {
             wrapperTime.className = "flex justify-center text-md"
             wrapperTime.innerHTML = formatHour(new Date(time).getHours())
         }
-        
+
         wrapperTempWrapper.className = "relative"
         wrapperTemp.className = "block font-bold text-center text-md"
         wrapperTempSign.className = "absolute top-0 right-[-0.3rem] font-bold text-center text-md"
@@ -194,31 +194,32 @@ async function getWeather(coords) {
             document.getElementById("currentWeatherDesc").innerHTML = "Current conditions will continue."
         }
     }
-
+    /*
+    <div class="flex flex-row py-3 border-t border-white/50">
+        <div class="flex flex-row w-2/5">
+            <div class="flex w-1/2 justify-start">
+                <p class="font-bold">Today</p>
+            </div>
+            <div class="flex w-1/2 justify-start">
+                <i class="wi wi-day-sunny self-center"></i>
+            </div>
+        </div>
+        <div class="flex flex-row w-3/5 justify-center">
+            <p class="flex w-1/5 justify-start">35</p>
+            <div class="flex justify-center w-3/5 h-1 bg-gray-800 self-center rounded-2xl"></div>
+            <p class="flex w-1/5 font-bold justify-end">99</p>
+        </div>
+    </div>
+    */  
     // Daily Weather
-    let minTemp = Math.min(...data.daily.temperature_2m_max,...data.daily.temperature_2m_min)
-    let maxTemp = Math.max(...data.daily.temperature_2m_max,...data.daily.temperature_2m_min)
-    for (let i =0;i< data.daily.temperature_2m_max.length;i++) {
+    
+    let minTemp = Math.min(...data.daily.temperature_2m_max, ...data.daily.temperature_2m_min)
+    let maxTemp = Math.max(...data.daily.temperature_2m_max, ...data.daily.temperature_2m_min)
+    
+    for (let i = 0; i < 7; i++) {
         let lowTemp = data.daily.temperature_2m_min[i]
         let highTemp = data.daily.temperature_2m_max[i]
 
-        /*
-        <div class="flex flex-row py-3 border-t border-white/50">
-            <div class="flex flex-row w-2/5">
-                <div class="flex w-1/2 justify-start">
-                    <p class="font-bold">Today</p>
-                </div>
-                <div class="flex w-1/2 justify-start">
-                    <i class="wi wi-day-sunny self-center"></i>
-                </div>
-            </div>
-            <div class="flex flex-row w-3/5 justify-center">
-                <p class="flex w-1/5 justify-start">35</p>
-                <div class="flex justify-center w-3/5 h-1 bg-gray-800 self-center rounded-2xl"></div>
-                <p class="flex w-1/5 font-bold justify-end">99</p>
-            </div>
-        </div>
-        */
         let wrapper = document.createElement("div")
         let wrapperLeftDiv = document.createElement("div")
         let wrapperRightDiv = document.createElement("div")
@@ -236,7 +237,27 @@ async function getWeather(coords) {
         wrapperLowTemp.className = "flex w-1/5 justify-start"
         wrapperChartDiv.className = "flex justify-center w-3/5 h-1 bg-gray-800 self-center rounded-2xl"
         wrapperHighTemp.className = "flex w-1/5 font-bold justify-end"
+
+        if (i == 0) {
+            wrapperDateDiv.innerHTML = `<p class="font-bold">Today</p>`
+        } else {
+            wrapperDateDiv.innerHTML = `<p class="font-bold">${new Date(data.daily.time[i]).toLocaleDateString('en-US', { weekday: 'short' })}</p>`
+        }
+        
+        wrapperIconDiv.innerHTML = `<i class="wi ${codeToDescription(data.daily.weather_code[i]).dayIcon} self-center"></i>`
+        wrapperLowTemp.innerHTML = lowTemp
+        wrapperHighTemp.innerHTML = highTemp
+
+        wrapperLeftDiv.appendChild(wrapperDateDiv)
+        wrapperLeftDiv.appendChild(wrapperIconDiv)
+        wrapperRightDiv.appendChild(wrapperLowTemp)
+        wrapperRightDiv.appendChild(wrapperChartDiv)
+        wrapperRightDiv.appendChild(wrapperHighTemp)
+        wrapper.appendChild(wrapperLeftDiv)
+        wrapper.appendChild(wrapperRightDiv)
+        document.getElementById("weeklyWeatherRow").appendChild(wrapper)
     }
+    
 }
 navigator.geolocation.getCurrentPosition(function (position) {
     const coords = position.coords
