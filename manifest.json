@@ -12,7 +12,8 @@
     "permissions": [
       "offscreen",
       "geolocation",
-      "alarms"
+      "alarms",
+      "storage"
     ],
     "background": {
       "service_worker": "background.js"
