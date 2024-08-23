@@ -135,11 +135,32 @@ function codeToDescription(code) {
         }
     }
 }
+function isSameHour(givenDateString) {
+    const givenDate = new Date(givenDateString);
+    const currentDate = new Date();
+    const isSameYear = givenDate.getFullYear() === currentDate.getFullYear();
+    const isSameMonth = givenDate.getMonth() === currentDate.getMonth();
+    const isSameDay = givenDate.getDate() === currentDate.getDate();
+    const isSameHour = givenDate.getHours() === currentDate.getHours();
+    return isSameYear && isSameMonth && isSameDay && isSameHour;
+}
+async function getData(coords) {
+    const cachedData = (await chrome.storage.local.get("weatherData")).weatherData
+    if (!cachedData || !isSameHour(cachedData.current.time)) {
+        console.log("Cached data not found!")
+        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.latitude}&longitude=${coords.longitude}&current=temperature_2m,weather_code&hourly=temperature_2m,precipitation_probability,is_day,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset&temperature_unit=fahrenheit&timezone=auto`)
+        const data = await response.json()
+        await chrome.storage.local.set({ "weatherData": data })
+        return data
+    } else {
+        console.log("Using cached data!")
+        return cachedData
+    }
+}
 async function getWeather(coords) {
     // ${coords.latitude}&longitude=${coords.longitude}
     const cityName = (await (await fetch(`https://api-bdc.net/data/reverse-geocode-client?latitude=${coords.latitude}&longitude=${coords.longitude}&localityLanguage=en`)).json()).locality
-    const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.latitude}&longitude=${coords.longitude}&current=temperature_2m,weather_code&hourly=temperature_2m,precipitation_probability,is_day,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset&temperature_unit=fahrenheit&timezone=auto`)
-    const data = await response.json()
+    const data = await getData(coords)
     console.log(data)
     console.log(cityName)
 
@@ -193,9 +214,9 @@ async function getWeather(coords) {
         } else if (i == 23 && currentCondition.description != false) {
             document.getElementById("currentWeatherDesc").innerHTML = "Current conditions will continue."
         }
-    } 
+    }
     // Daily Weather
-    
+
     let minTemp = Math.min(...data.daily.temperature_2m_max, ...data.daily.temperature_2m_min)
     let maxTemp = Math.max(...data.daily.temperature_2m_max, ...data.daily.temperature_2m_min)
     for (let i = 0; i < 7; i++) {
@@ -225,9 +246,9 @@ async function getWeather(coords) {
         if (i == 0) {
             wrapperDateDiv.innerHTML = `<p class="font-bold">Today</p>`
         } else {
-            wrapperDateDiv.innerHTML = `<p class="font-bold">${new Date(data.daily.time[i]).toLocaleDateString('en-US', { weekday: 'short',timeZone: "UTC" })}</p>`
+            wrapperDateDiv.innerHTML = `<p class="font-bold">${new Date(data.daily.time[i]).toLocaleDateString('en-US', { weekday: 'short', timeZone: "UTC" })}</p>`
         }
-        
+
         wrapperIconDiv.innerHTML = `<i class="wi ${codeToDescription(data.daily.weather_code[i]).dayIcon} self-center"></i>`
         wrapperLowTemp.innerHTML = `${Math.round(lowTemp)}${data.daily_units.temperature_2m_min[0]}`
         wrapperHighTemp.innerHTML = `${Math.round(highTemp)}${data.daily_units.temperature_2m_min[0]}`
@@ -242,7 +263,7 @@ async function getWeather(coords) {
         wrapper.appendChild(wrapperRightDiv)
         document.getElementById("weeklyWeatherRow").appendChild(wrapper)
     }
-    
+
 }
 navigator.geolocation.getCurrentPosition(function (position) {
     const coords = position.coords
