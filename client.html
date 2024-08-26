@@ -9,8 +9,8 @@
         rel="stylesheet">
     <script src="tailwind.js"></script>
     <script src="tailwind.config.js"></script>
-    <link rel="stylesheet" href="css/weather-icons.min.css" </head>
-
+    <link rel="stylesheet" href="css/weather-icons.min.css">
+</head>
 <body class="h-[36rem] w-96 font-mono bg-gray-600 text-white">
     <!-- Video Background -->
     <video id="backgroundVideo" autoplay muted loop
@@ -54,9 +54,15 @@
                 <p class="flex py-2 text-white/75 border-b">AIR QUALITY</p>
                 <p id="airQualityNumber" class="flex pt-1 text-4xl">50</p>
                 <p id="airQualityStatus" class="flex pt-1 text-xl font-bold">Moderate</p>
-                <div id="airQualityGradient" style="background: linear-gradient(to right, rgb(163,230,53), rgb(248,113,113));
-" class="flex justify-center my-1 w-full h-1 bg-gray-800/50 self-center rounded-2xl"></div>
-                <p id="airQualityDescription" class="flex py-1">Air quality index is 50, which is similar to yesterday at about this time.</p>
+                <div id="airQualityGradient"
+                    style="background: linear-gradient(to right, rgb(163,230,53), rgb(248,113,113));"
+                    class="relative flex justify-center w-full h-1 my-1 self-center rounded-2xl">
+                    <div id="airQualityMarker" class="absolute aspect-square h-1 rounded-full bg-white">
+
+                    </div>
+                </div>
+                <p id="airQualityDescription" class="flex py-1">Air quality index is 50, which is similar to yesterday
+                    at about this time.</p>
             </div>
         </div>
         <!-- Footer, lets you change between location -->
