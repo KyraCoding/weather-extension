@@ -135,6 +135,17 @@ function codeToDescription(code) {
         }
     }
 }
+function colorTransition(start,width) {
+    const startColor = [163,230,53]
+    const endColor = [248,113,113]
+    var convertedStart = []
+    var convertedEnd = []
+    for (var i =0;i<3;i++) {
+        convertedStart[i] = (endColor[i]*(start/100) + startColor[i]*(1-start/100))
+        convertedEnd[i] = (endColor[i]*((start+width)/100) + startColor[i]*(1-(start+width)/100))
+    }
+    return [convertedStart,convertedEnd]
+}
 function isSameHour(givenDateString) {
     const givenDate = new Date(givenDateString);
     const currentDate = new Date();
@@ -222,6 +233,7 @@ async function getWeather(coords) {
     for (let i = 0; i < 7; i++) {
         let lowTemp = data.daily.temperature_2m_min[i]
         let highTemp = data.daily.temperature_2m_max[i]
+        let colors = colorTransition(((lowTemp - minTemp) / (maxTemp - minTemp)) * 100,((highTemp - lowTemp) / (maxTemp - minTemp)) * 100)
         console.log(lowTemp,highTemp)
         let wrapper = document.createElement("div")
         let wrapperLeftDiv = document.createElement("div")
@@ -241,6 +253,7 @@ async function getWeather(coords) {
         wrapperLowTemp.className = "flex w-1/5 justify-start"
         wrapperChartDiv.className = "relative flex justify-center w-3/5 h-1 bg-gray-800/50 self-center rounded-2xl"
         wrapperChartOverlay.className = `absolute h-full bg-white rounded-2xl w-[${((highTemp - lowTemp) / (maxTemp - minTemp)) * 100}%] left-[${((lowTemp - minTemp) / (maxTemp - minTemp)) * 100}%]`
+        wrapperChartOverlay.style = `background: linear-gradient(to right, rgb(${colors[0][0]}, ${colors[0][1]}, ${colors[0][2]}), rgb(${colors[1][0]}, ${colors[1][1]}, ${colors[1][2]}));`
         wrapperHighTemp.className = "flex w-1/5 font-bold justify-end"
 
         if (i == 0) {
