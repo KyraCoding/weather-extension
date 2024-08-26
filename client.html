@@ -52,10 +52,11 @@
             <!-- Air quality and rain chance? -->
             <div class="flex flex-col w-full h-fit rounded backdrop-blur-3xl py-2 px-4">
                 <p class="flex py-2 text-white/75 border-b">AIR QUALITY</p>
-                <p class="flex pt-1 text-4xl">50</p>
-                <p class="flex pt-1 text-xl font-bold">Moderate</p>
-                <div class="flex justify-center my-1 w-full h-1 bg-gray-800/50 self-center rounded-2xl"></div>
-                <p class="flex py-1">Air quality index is 50, which is similar to yesterday at about this time.</p>
+                <p id="airQualityNumber" class="flex pt-1 text-4xl">50</p>
+                <p id="airQualityStatus" class="flex pt-1 text-xl font-bold">Moderate</p>
+                <div id="airQualityGradient" style="background: linear-gradient(to right, rgb(163,230,53), rgb(248,113,113));
+" class="flex justify-center my-1 w-full h-1 bg-gray-800/50 self-center rounded-2xl"></div>
+                <p id="airQualityDescription" class="flex py-1">Air quality index is 50, which is similar to yesterday at about this time.</p>
             </div>
         </div>
         <!-- Footer, lets you change between location -->

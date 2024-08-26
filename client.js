@@ -280,6 +280,9 @@ async function getWeather(coords) {
         wrapper.appendChild(wrapperLeftDiv)
         wrapper.appendChild(wrapperRightDiv)
         document.getElementById("weeklyWeatherRow").appendChild(wrapper)
+
+        // Air quality
+        document.getElementById("airQualityNumber").innerHTML = "test"
     }
 
 }
