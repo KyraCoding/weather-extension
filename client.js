@@ -135,16 +135,49 @@ function codeToDescription(code) {
         }
     }
 }
-function colorTransition(start,width) {
-    const startColor = [163,230,53]
-    const endColor = [248,113,113]
+function aqiToDescription(code) {
+    if (code >= 0 && code <= 50) {
+        return {
+            color: "bg-lime-400",
+            status: "Good"
+        }
+    } else if (code >= 51 && code <= 100) {
+        return {
+            color: "bg-yellow-400",
+            status: "Moderate"
+        }
+    } else if (code >= 101 && code <= 150) {
+        return {
+            color: "bg-orange-400",
+            status: "Unhealthy"
+        }
+    } else if (code >= 151 && code <= 200) {
+        return {
+            color: "bg-rose-400",
+            status: "Unhealthy"
+        }
+    } else if (code >= 201 && code <= 300) {
+        return {
+            color: "bg-fuchsia-400",
+            status: "Very Unhealthy"
+        }
+    } else if (code >= 301) {
+        return {
+            color: "bg-rose-950",
+            status: "Hazardous"
+        }
+    }
+}
+function colorTransition(start, width) {
+    const startColor = [163, 230, 53]
+    const endColor = [248, 113, 113]
     var convertedStart = []
     var convertedEnd = []
-    for (var i =0;i<3;i++) {
-        convertedStart[i] = (endColor[i]*(start/100) + startColor[i]*(1-start/100))
-        convertedEnd[i] = (endColor[i]*((start+width)/100) + startColor[i]*(1-(start+width)/100))
+    for (var i = 0; i < 3; i++) {
+        convertedStart[i] = (endColor[i] * (start / 100) + startColor[i] * (1 - start / 100))
+        convertedEnd[i] = (endColor[i] * ((start + width) / 100) + startColor[i] * (1 - (start + width) / 100))
     }
-    return [convertedStart,convertedEnd]
+    return [convertedStart, convertedEnd]
 }
 function isSameHour(givenDateString) {
     const givenDate = new Date(givenDateString);
@@ -172,7 +205,7 @@ async function getAirData(coords) {
     const cachedData = (await chrome.storage.local.get("airData")).airData
     if (!cachedData || !isSameHour(cachedData.current.time)) {
         console.log("Cached data not found!")
-        const response = await fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${coords.latitude}&longitude=${coords.longitude}&current=us_aqi`)
+        const response = await fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${coords.latitude}&longitude=${coords.longitude}&current=us_aqi&timezone=auto`)
         const data = await response.json()
         await chrome.storage.local.set({ "airData": data })
         return data
@@ -247,8 +280,8 @@ async function getWeather(coords) {
     for (let i = 0; i < 7; i++) {
         let lowTemp = data.daily.temperature_2m_min[i]
         let highTemp = data.daily.temperature_2m_max[i]
-        let colors = colorTransition(((lowTemp - minTemp) / (maxTemp - minTemp)) * 100,((highTemp - lowTemp) / (maxTemp - minTemp)) * 100)
-        console.log(lowTemp,highTemp)
+        let colors = colorTransition(((lowTemp - minTemp) / (maxTemp - minTemp)) * 100, ((highTemp - lowTemp) / (maxTemp - minTemp)) * 100)
+        console.log(lowTemp, highTemp)
         let wrapper = document.createElement("div")
         let wrapperLeftDiv = document.createElement("div")
         let wrapperRightDiv = document.createElement("div")
@@ -279,11 +312,11 @@ async function getWeather(coords) {
         wrapperIconDiv.innerHTML = `<i class="wi ${codeToDescription(data.daily.weather_code[i]).dayIcon} self-center"></i>`
         wrapperLowTemp.innerHTML = `${Math.round(lowTemp)}${data.daily_units.temperature_2m_min[0]}`
         wrapperHighTemp.innerHTML = `${Math.round(highTemp)}${data.daily_units.temperature_2m_min[0]}`
-        
+
         wrapperLeftDiv.appendChild(wrapperDateDiv)
         wrapperLeftDiv.appendChild(wrapperIconDiv)
         wrapperChartDiv.appendChild(wrapperChartOverlay)
-        if (i ==0) {
+        if (i == 0) {
             let wrapperCurrentTemp = document.createElement("div")
             wrapperCurrentTemp.className = `absolute aspect-square h-1 rounded-full left-[${((data.current.temperature_2m - minTemp) / (maxTemp - minTemp)) * 100}%] bg-white`
             wrapperChartDiv.appendChild(wrapperCurrentTemp)
