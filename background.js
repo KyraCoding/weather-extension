@@ -47,13 +47,19 @@ async function getGeolocation() {
 }
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name === "backgroundUpdates") {
-    cacheRequest()
+    cacheWeatherData()
   }
 });
-async function cacheRequest() {
+async function cacheWeatherData() {
   const location = await getGeolocation()
   const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&current=temperature_2m,weather_code&hourly=temperature_2m,precipitation_probability,is_day,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset&temperature_unit=fahrenheit&timezone=auto`)
   const data = await response.json()
   await chrome.storage.local.set({ "weatherData": data })
 }
-cacheRequest()
+async function cacheAirData() {
+  const location = await getGeolocation()
+  const response = await fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&current=us_aqi`)
+  const data = await response.json()
+  await chrome.storage.local.set({ "airData": data })
+}
+cacheWeatherData()
