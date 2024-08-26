@@ -138,37 +138,37 @@ function codeToDescription(code) {
 function aqiToDescription(code) {
     if (code >= 0 && code <= 50) {
         return {
-            color: "bg-lime-400",
+            color: "text-lime-400",
             status: "Good",
             description: "Air quality is considered satisfactory, and air pollution poses little or no risk."
         }
     } else if (code >= 51 && code <= 100) {
         return {
-            color: "bg-yellow-400",
+            color: "text-yellow-400",
             status: "Moderate",
             description: "Air quality is acceptable; however, for some pollutants there may be a moderate health concern for a very small number of people who are unusually sensitive to air pollution."
         }
     } else if (code >= 101 && code <= 150) {
         return {
-            color: "bg-orange-400",
+            color: "text-orange-400",
             status: "Unhealthy",
             description: "Members of sensitive groups may experience health effects. The general public is not likely to be affected."
         }
     } else if (code >= 151 && code <= 200) {
         return {
-            color: "bg-rose-400",
+            color: "text-rose-400",
             status: "Unhealthy",
             description: "Everyone may begin to experience health effects; members of sensitive groups may experience more serious health effects."
         }
     } else if (code >= 201 && code <= 300) {
         return {
-            color: "bg-fuchsia-400",
+            color: "text-fuchsia-400",
             status: "Very Unhealthy",
             description: "Health alert: everyone may experience more serious health effects."
         }
     } else if (code >= 301) {
         return {
-            color: "bg-rose-950",
+            color: "text-rose-950",
             status: "Hazardous",
             description: "Health warnings of emergency conditions. The entire population is more likely to be affected."
         }
@@ -335,7 +335,11 @@ async function getWeather(coords) {
         document.getElementById("weeklyWeatherRow").appendChild(wrapper)
 
         // Air quality
+        const airStatus = aqiToDescription(airData.current.us_aqi)
         document.getElementById("airQualityNumber").innerHTML = airData.current.us_aqi
+        document.getElementById("airQualityStatus").innerHTML = airStatus.status
+        document.getElementById("airQualityNumber").classList.add(airStatus.color)
+        document.getElementById("airQualityDescription").innerHTML = airStatus.description
     }
 
 }
