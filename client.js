@@ -155,7 +155,7 @@ function isSameHour(givenDateString) {
     const isSameHour = givenDate.getHours() === currentDate.getHours();
     return isSameYear && isSameMonth && isSameDay && isSameHour;
 }
-async function getData(coords) {
+async function getWeatherData(coords) {
     const cachedData = (await chrome.storage.local.get("weatherData")).weatherData
     if (!cachedData || !isSameHour(cachedData.current.time)) {
         console.log("Cached data not found!")
@@ -168,10 +168,24 @@ async function getData(coords) {
         return cachedData
     }
 }
+async function getAirData(coords) {
+    const cachedData = (await chrome.storage.local.get("airData")).airData
+    if (!cachedData || !isSameHour(cachedData.current.time)) {
+        console.log("Cached data not found!")
+        const response = await fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&current=us_aqi`)
+        const data = await response.json()
+        await chrome.storage.local.set({ "airData": data })
+        return data
+    } else {
+        console.log("Using cached data!")
+        return cachedData
+    }
+}
 async function getWeather(coords) {
     // ${coords.latitude}&longitude=${coords.longitude}
     const cityName = (await (await fetch(`https://api-bdc.net/data/reverse-geocode-client?latitude=${coords.latitude}&longitude=${coords.longitude}&localityLanguage=en`)).json()).locality
-    const data = await getData(coords)
+    const data = await getWeatherData(coords)
+    const airData = await getAirData(coords)
     console.log(data)
     console.log(cityName)
 
