@@ -9,8 +9,7 @@
         rel="stylesheet">
     <script src="tailwind.js"></script>
     <script src="tailwind.config.js"></script>
-    <link rel="stylesheet" href="css/weather-icons.min.css"
-</head>
+    <link rel="stylesheet" href="css/weather-icons.min.css" </head>
 
 <body class="h-[36rem] w-96 font-mono bg-gray-600 text-white">
     <!-- Video Background -->
@@ -45,9 +44,18 @@
             </div>
             <!-- Weekly Predictions -->
             <div class="flex flex-col w-full h-fit rounded backdrop-blur-3xl py-2 px-4">
-                <p class="flex py-2">WEEKLY FORECAST</p>
+                <p class="flex py-2 text-white/75">WEEKLY FORECAST</p>
                 <div id="weeklyWeatherRow" class="flex flex-col w-full">
                 </div>
+            </div>
+
+            <!-- Air quality and rain chance? -->
+            <div class="flex flex-col w-full h-fit rounded backdrop-blur-3xl py-2 px-4">
+                <p class="flex py-2 text-white/75 border-b">AIR QUALITY</p>
+                <p class="flex pt-1 text-4xl">50</p>
+                <p class="flex pt-1 text-xl font-bold">Moderate</p>
+                <div class="flex justify-center my-1 w-full h-1 bg-gray-800/50 self-center rounded-2xl"></div>
+                <p class="flex py-1">Air quality index is 50, which is similar to yesterday at about this time.</p>
             </div>
         </div>
         <!-- Footer, lets you change between location -->

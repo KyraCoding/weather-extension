@@ -271,7 +271,7 @@ async function getWeather(coords) {
         wrapperChartDiv.appendChild(wrapperChartOverlay)
         if (i ==0) {
             let wrapperCurrentTemp = document.createElement("div")
-            wrapperCurrentTemp.className = `absolute aspect-square h-1 rounded-full left-[${((data.current.temperature_2m - minTemp) / (maxTemp - minTemp)) * 100}%] bg-gray-800/50`
+            wrapperCurrentTemp.className = `absolute aspect-square h-1 rounded-full left-[${((data.current.temperature_2m - minTemp) / (maxTemp - minTemp)) * 100}%] bg-white`
             wrapperChartDiv.appendChild(wrapperCurrentTemp)
         }
         wrapperRightDiv.appendChild(wrapperLowTemp)
