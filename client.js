@@ -222,7 +222,7 @@ async function getWeather(coords) {
     for (let i = 0; i < 7; i++) {
         let lowTemp = data.daily.temperature_2m_min[i]
         let highTemp = data.daily.temperature_2m_max[i]
-
+        console.log(lowTemp,highTemp)
         let wrapper = document.createElement("div")
         let wrapperLeftDiv = document.createElement("div")
         let wrapperRightDiv = document.createElement("div")
@@ -240,7 +240,7 @@ async function getWeather(coords) {
         wrapperIconDiv.className = "flex w-1/2 justify-start"
         wrapperLowTemp.className = "flex w-1/5 justify-start"
         wrapperChartDiv.className = "relative flex justify-center w-3/5 h-1 bg-gray-800/50 self-center rounded-2xl"
-        wrapperChartOverlay.className = `absolute h-full bg-white rounded-2xl w-[${width = ((highTemp - lowTemp) / (maxTemp - minTemp)) * 100}%] left-[${left = ((lowTemp - minTemp) / (maxTemp - minTemp)) * 100}%]`
+        wrapperChartOverlay.className = `absolute h-full bg-white rounded-2xl w-[${((highTemp - lowTemp) / (maxTemp - minTemp)) * 100}%] left-[${((lowTemp - minTemp) / (maxTemp - minTemp)) * 100}%]`
         wrapperHighTemp.className = "flex w-1/5 font-bold justify-end"
 
         if (i == 0) {
@@ -252,10 +252,15 @@ async function getWeather(coords) {
         wrapperIconDiv.innerHTML = `<i class="wi ${codeToDescription(data.daily.weather_code[i]).dayIcon} self-center"></i>`
         wrapperLowTemp.innerHTML = `${Math.round(lowTemp)}${data.daily_units.temperature_2m_min[0]}`
         wrapperHighTemp.innerHTML = `${Math.round(highTemp)}${data.daily_units.temperature_2m_min[0]}`
-
+        
         wrapperLeftDiv.appendChild(wrapperDateDiv)
         wrapperLeftDiv.appendChild(wrapperIconDiv)
         wrapperChartDiv.appendChild(wrapperChartOverlay)
+        if (i ==0) {
+            let wrapperCurrentTemp = document.createElement("div")
+            wrapperCurrentTemp.className = `absolute aspect-square h-1 rounded-full left-[${((data.current.temperature_2m - minTemp) / (maxTemp - minTemp)) * 100}%] bg-gray-800/50`
+            wrapperChartDiv.appendChild(wrapperCurrentTemp)
+        }
         wrapperRightDiv.appendChild(wrapperLowTemp)
         wrapperRightDiv.appendChild(wrapperChartDiv)
         wrapperRightDiv.appendChild(wrapperHighTemp)
