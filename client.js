@@ -172,7 +172,7 @@ async function getAirData(coords) {
     const cachedData = (await chrome.storage.local.get("airData")).airData
     if (!cachedData || !isSameHour(cachedData.current.time)) {
         console.log("Cached data not found!")
-        const response = await fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&current=us_aqi`)
+        const response = await fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${coords.latitude}&longitude=${coords.longitude}&current=us_aqi`)
         const data = await response.json()
         await chrome.storage.local.set({ "airData": data })
         return data
@@ -296,7 +296,7 @@ async function getWeather(coords) {
         document.getElementById("weeklyWeatherRow").appendChild(wrapper)
 
         // Air quality
-        document.getElementById("airQualityNumber").innerHTML = "test"
+        document.getElementById("airQualityNumber").innerHTML = airData.current.us_aqi
     }
 
 }

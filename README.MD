@@ -5,15 +5,20 @@ Heavily inspired by Apple's Weather app
 
 # Credits
 
-# Weather API
-[Open Meteo](https://open-meteo.com/)
+## Weather APIs
+
+### Main Weather API
+- [Open Meteo](https://open-meteo.com/)
+
+### Air Quality API
+- [Open Meteo](https://open-meteo.com/en/docs/air-quality-api)
 
 ## Icons
 
-### Logo: Created by fjstudio - Flaticon
+### Logo: 
+- Created by fjstudio - Flaticon
 
-## Video Backgrounds
-
+### Video Backgrounds
 - [Video by João Pavese](https://www.pexels.com/video/time-lapse-of-cloud-formations-6707366/)
 - [Video by Resha](https://www.pexels.com/video/time-lapse-of-blue-sky-3909741/)
 - [Video by Pavel Danilyuk](https://www.pexels.com/video/flowers-rain-motion-green-4536559/)
