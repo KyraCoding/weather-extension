@@ -140,37 +140,37 @@ function aqiToDescription(code) {
         return {
             color: "text-lime-400",
             status: "Good",
-            description: "Air quality is considered satisfactory, and air pollution poses little or no risk."
+            description: "Air quality is satisfactory, and air pollution poses little or no risk."
         }
     } else if (code >= 51 && code <= 100) {
         return {
             color: "text-yellow-400",
             status: "Moderate",
-            description: "Air quality is acceptable; however, for some pollutants there may be a moderate health concern for a very small number of people who are unusually sensitive to air pollution."
+            description: "Air quality is acceptable. However, there may be a risk for some people, particularly those who are unusually sensitive to air pollution."
         }
     } else if (code >= 101 && code <= 150) {
         return {
             color: "text-orange-400",
             status: "Unhealthy",
-            description: "Members of sensitive groups may experience health effects. The general public is not likely to be affected."
+            description: "Members of sensitive groups may experience health effects. The general public is less likely to be affected."
         }
     } else if (code >= 151 && code <= 200) {
         return {
             color: "text-rose-400",
             status: "Unhealthy",
-            description: "Everyone may begin to experience health effects; members of sensitive groups may experience more serious health effects."
+            description: "Some members of the general public may experience health effects; members of sensitive groups may experience more serious health effects."
         }
     } else if (code >= 201 && code <= 300) {
         return {
             color: "text-fuchsia-400",
             status: "Very Unhealthy",
-            description: "Health alert: everyone may experience more serious health effects."
+            description: "Health alert: The risk of health effects is increased for everyone."
         }
     } else if (code >= 301) {
         return {
             color: "text-rose-950",
             status: "Hazardous",
-            description: "Health warnings of emergency conditions. The entire population is more likely to be affected."
+            description: "Health warning of emergency conditions: everyone is more likely to be affected."
         }
     }
 }
