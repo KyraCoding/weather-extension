@@ -2,7 +2,7 @@
 
 A weather extension with a simplistic ui, no paid plans, just weather at your fingertips
 Heavily inspired by Apple's Weather app
-[Weather Extension Image](https://i.ibb.co/7jQXLgz/Screenshot-2024-08-28-10-14-13-AM.png)
+![Weather Extension Image](https://i.ibb.co/7jQXLgz/Screenshot-2024-08-28-10-14-13-AM.png)
 
 # Credits
 
